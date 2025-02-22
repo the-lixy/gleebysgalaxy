@@ -16,6 +16,9 @@ public class PlayerMovement : MonoBehaviour
     {
         float xInput = Input.GetAxis("Horizontal");
         float yInput = Input.GetAxis("Vertical");
-        body.linearVelocity = new Vector2(xInput, yInput).normalized;    
+
+        Vector2 direction = new Vector2(xInput, yInput).normalized;
+        //body.linearVelocity = new Vector2((xInput*2), (yInput*2)).normalized;
+        body.linearVelocity = direction * speed;
     }
 }
