@@ -1,0 +1,35 @@
+ StoryTitle
+TestStory
+
+ StoryData
+{
+ ifid 84EADFC1-EEEB-4264-AAE9-089036B17B6D,
+ format Entweedle,
+ format-version 1.1.1,
+ startnode 1,
+ zoom 1,
+ start Start
+}
+
+ UserScript [script]
+
+
+ UserStylesheet [stylesheet]
+
+
+ Start {position625,250,size100,100}
+Hello.
+
+Hi[[hi]]
+Goodbye.[[bye]]
+
+ hi {position625,375,size100,100}
+This is an example of branching dialogue.
+
+I see.[[I see]]
+
+ bye {position750,375,size100,100}
+Goodbye.
+
+ I see {position625,500,size100,100}
+[[bye]]
