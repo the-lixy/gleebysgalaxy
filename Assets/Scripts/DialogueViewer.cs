@@ -11,7 +11,8 @@ public class DialogueViewer : MonoBehaviour
 {
     [SerializeField] Transform parentOfResponses;
     [SerializeField] Button prefab_btnResponse;
-    [SerializeField] Button btnSpeedyProgress;
+    [SerializeField] UnityEngine.UI.Text txtNodeDisplay;
+    [SerializeField] DialogueController dialogueController;
     DialogueController controller;
 
     [DllImport("__Internal")]
@@ -19,7 +20,7 @@ public class DialogueViewer : MonoBehaviour
 
     private void Start()
     {
-        controller = GetComponent<DialogueController>();
+        controller = dialogueController;
         controller.onEnteredNode += OnNodeEntered;
         controller.InitializeDialogue();
     }
@@ -41,8 +42,7 @@ public class DialogueViewer : MonoBehaviour
 
     private void OnNodeEntered(Node newNode)
     {
-        //txtTitle.Clear();
-        //txtMessage.Clear();
+        txtNodeDisplay.text = "";
         KillAllChildren(parentOfResponses);
 
         UnityAction typeResponsesAfterMessage = delegate
@@ -51,28 +51,11 @@ public class DialogueViewer : MonoBehaviour
             {
                 int currentChoiceIndex = i;
                 var response = newNode.responses[i];
-                var responceButton = Instantiate(prefab_btnResponse, parentOfResponses);
-                responceButton.onClick.AddListener(delegate { OnNodeSelected(currentChoiceIndex); });
+                var responseButton = Instantiate(prefab_btnResponse, parentOfResponses);
+                responseButton.GetComponentInChildren<UnityEngine.UI.Text>().text = response.displayText;
+                responseButton.onClick.AddListener(delegate { OnNodeSelected(currentChoiceIndex); });
             }
         };
 
-       /* UnityAction typeMessageAfterTitle = delegate
-        {
-            txtMessage.Begin(newNode.text, typeResponsesAfterMessage);
-        }; */
-    }
-
-    public static Sprite Texture2DToSprite(Texture2D t)
-    {
-        return Sprite.Create(t, new Rect(0, 0, t.width, t.height), new Vector2(0.5f, 0.5f));
-    }
-
-    private void ShowContinueButton(UnityAction onContinuePressed)
-    {
-        var responceButton = Instantiate(prefab_btnResponse, parentOfResponses);
-        responceButton.onClick.AddListener(delegate {
-            KillAllChildren(parentOfResponses);
-            onContinuePressed();
-        });
     }
 }

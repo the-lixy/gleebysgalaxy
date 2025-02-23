@@ -5,8 +5,8 @@ using UnityEngine;
 
 public class DialogueObject
 {
-    private const string kStart = "START";
-    private const string kEnd = "END";
+    private const string kStart = "Start";
+    private const string kEnd = "End";
 
     public struct Response
     {
@@ -55,12 +55,17 @@ public class DialogueObject
         {
             return nodes[nodeTitle];
         }
-
+        public Node GetStartNode()
+        {
+            return nodes[titleOfStartNode];
+        }
+        /*
         public Node GetStartNode()
         {
             UnityEngine.Assertions.Assert.IsNotNull(titleOfStartNode);
             return nodes[titleOfStartNode];
         }
+        */
 
         public void ParseTwineText(string twineText)
         {
@@ -115,6 +120,9 @@ public class DialogueObject
                 UnityEngine.Assertions.Assert.IsTrue(titleEnd > 0, "Maybe you have a node with no responses?");
                 string title = currLineText.Substring(titleStart, titleEnd).Trim();
 
+                //Debug.LogError(kStart);
+                Debug.LogError(currLineText);
+
                 // Extract Tags (if any)
                 string tags = tagsPresent
                     ? currLineText.Substring(titleEnd + 1, (endOfFirstLine - titleEnd) - 2)
@@ -124,19 +132,31 @@ public class DialogueObject
                     tags = tags.Substring(0, tags.Length - 1);
 
                 // Extract Message Text & Responses
-                string messsageText = currLineText.Substring(endOfFirstLine, startOfResponses - endOfFirstLine).Trim();
+                string messageText = currLineText.Substring(endOfFirstLine, startOfResponses - endOfFirstLine).Trim();
                 string responseText = currLineText.Substring(startOfResponses).Trim();
 
                 Node curNode = new Node();
                 curNode.title = title;
-                curNode.text = messsageText;
+                curNode.text = messageText;
                 curNode.tags = new List<string>(tags.Split(new string[] { " " }, StringSplitOptions.None));
+                Console.WriteLine(string.Join(", ", curNode.tags));
 
                 if (curNode.tags.Contains(kStart))
                 {
+                    Debug.Log("UHHH");
+                }
+
+                /*
+
+                if (curNode.tags.Contains(kStart))
+                {
+                    Debug.Log("Found kStart");
                     UnityEngine.Assertions.Assert.IsTrue(null == titleOfStartNode);
                     titleOfStartNode = curNode.title;
                 }
+                Debug.Log(curNode.title);
+
+            */
 
                 // Note: response messages are optional (if no message then destination is the message)
                 // With Message Format: "\r\n Message[[Response One]]"
